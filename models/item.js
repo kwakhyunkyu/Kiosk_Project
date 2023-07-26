@@ -1,14 +1,7 @@
 'use strict';
 const { Model } = require('sequelize');
-
-const itemType = {
-  COFFEE: 'coffee',
-  JUICE: 'juice',
-  FOOD: 'food',
-};
-
 module.exports = (sequelize, DataTypes) => {
-  class items extends Model {
+  class Item extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -17,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {}
   }
 
-  items.init(
+  Item.init(
     {
       id: {
         type: DataTypes.BIGINT,
@@ -59,9 +52,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'items', // 모델 이름을 지정합니다.
+      tableName: 'items',
+      modelName: 'Item',
     }
   );
 
-  return items;
+  return Item;
 };
