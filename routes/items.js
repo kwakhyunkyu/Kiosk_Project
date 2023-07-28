@@ -6,7 +6,7 @@ const { Item } = require('../models');
 const VALID_TYPES = ['Drink'];
 
 // 상품 추가 API
-router.post('/items', async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const { name, price, type } = req.body;
 
@@ -35,7 +35,7 @@ router.post('/items', async (req, res) => {
 });
 
 // 상품 조회 API
-router.get('/items', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const { type } = req.query;
     let items;
@@ -58,7 +58,7 @@ router.get('/items', async (req, res) => {
 });
 
 // 상품 삭제 API
-router.delete('/items/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     const itemId = req.params.id;
     const item = await Item.findByPk(itemId);
@@ -78,7 +78,7 @@ router.delete('/items/:id', async (req, res) => {
 });
 
 // 1차 - 사용자의 대답에 따라 삭제 또는 유지
-router.post('/items/:id/delete', async (req, res) => {
+router.post('/:id/delete', async (req, res) => {
   try {
     const itemId = req.params.id;
     const item = await Item.findByPk(itemId);
@@ -103,7 +103,7 @@ router.post('/items/:id/delete', async (req, res) => {
   }
 });
 
-router.put('/items/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {
   try {
     const itemId = req.params.id;
     const item = await Item.findByPk(itemId);

@@ -1,43 +1,40 @@
 'use strict';
 const { Model } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
-  class Item extends Model {
+  class order_item extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {}
+    static associate(models) {
+      // 1:N 관계 정의
+      this.belongsTo(models.items, {
+        foreignKey: 'item_id',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+      });
+    }
   }
 
-  Item.init(
+  order_item.init(
     {
-      id: {
+      item_id: {
         type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false,
-      },
-      name: {
-        type: DataTypes.STRING,
-        unique: true,
-        allowNull: false,
-      },
-      price: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      type: {
-        type: DataTypes.STRING,
+        references: {
+          model: 'items',
+          key: 'id',
+        },
         allowNull: false,
       },
       amount: {
         type: DataTypes.INTEGER,
-        defaultValue: 0,
+        allowNull: false,
       },
-      option_id: {
+      state: {
         type: DataTypes.INTEGER,
-        defaultValue: 0,
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,
@@ -52,10 +49,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      tableName: 'items',
-      modelName: 'Item',
+      modelName: 'order_item',
     }
   );
 
-  return Item;
+  return order_item;
 };
