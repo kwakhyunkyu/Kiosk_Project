@@ -9,8 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // 1:N 관계 정의
-      this.belongsTo(models.items, {
+      this.belongsTo(models.item, {
         foreignKey: 'item_id',
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
@@ -23,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       item_id: {
         type: DataTypes.INTEGER,
         references: {
-          model: 'items',
+          model: 'item',
           key: 'id',
         },
         allowNull: false,
