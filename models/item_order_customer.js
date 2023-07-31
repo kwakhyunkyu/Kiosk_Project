@@ -1,54 +1,59 @@
 'use strict';
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class item extends Model {
+  class item_order_customer extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.hasMany(models.order_item, {
+      // define association here
+      this.belongsTo(models.item, {
         foreignKey: 'item_id',
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       });
-      this.hasMany(models.item_order_customer, {
-        foreignKey: 'item_id',
+
+      this.belongsTo(models.order_customer, {
+        foreignKey: 'order_customer_id',
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       });
     }
   }
-
-  item.init(
+  item_order_customer.init(
     {
       id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
+        allowNull: false,
         autoIncrement: true,
-        allowNull: false,
-      },
-      name: {
-        type: DataTypes.STRING,
-        unique: true,
-        allowNull: false,
-      },
-      price: {
+        primaryKey: true,
         type: DataTypes.INTEGER,
+      },
+      item_id: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'item',
+          key: 'id',
+        },
         allowNull: false,
       },
-      type: {
-        type: DataTypes.STRING,
+      order_customer_id: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'order_customer',
+          key: 'id',
+        },
         allowNull: false,
       },
       amount: {
         type: DataTypes.INTEGER,
-        defaultValue: 0,
       },
-      option_id: {
+      option: {
+        type: DataTypes.JSON,
+      },
+      price: {
         type: DataTypes.INTEGER,
-        defaultValue: 0,
       },
       createdAt: {
         allowNull: false,
@@ -63,9 +68,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'item',
+      modelName: 'item_order_customer',
     }
   );
-
-  return item;
+  return item_order_customer;
 };
