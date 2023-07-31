@@ -1,27 +1,23 @@
 'use strict';
 const { Model } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
-  class item extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
+  class Item extends Model {
     static associate(models) {
-      this.hasMany(models.order_item, {
-        foreignKey: 'item_id',
+      this.hasMany(models.OrderItem, {
+        foreignKey: 'itemId',
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       });
-      this.hasMany(models.item_order_customer, {
-        foreignKey: 'item_id',
+      this.hasMany(models.ItemOrderCustomer, {
+        foreignKey: 'itemId',
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       });
     }
   }
 
-  item.init(
+  Item.init(
     {
       id: {
         type: DataTypes.INTEGER,
@@ -46,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         defaultValue: 0,
       },
-      option_id: {
+      optionId: {
         type: DataTypes.INTEGER,
         defaultValue: 0,
       },
@@ -63,9 +59,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'item',
+      modelName: 'Item',
+      tableName: 'items',
     }
   );
 
-  return item;
+  return Item;
 };
