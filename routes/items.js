@@ -1,4 +1,3 @@
-// routes/items.js
 const express = require('express');
 const router = express.Router();
 const { Item } = require('../models');
@@ -30,8 +29,8 @@ router.post('/', async (req, res) => {
 
     res.status(201).json(newItem);
   } catch (error) {
-    console.error('Error while adding item:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error('상품을 추가하는 도중 오류가 발생했습니다.:', error);
+    res.status(500).json({ error: '서버 오류가 발생했습니다.' });
   }
 });
 
@@ -69,9 +68,9 @@ router.delete('/:id', async (req, res) => {
     }
 
     // 상품 삭제
-    const message = await Item.deleteItem(itemId);
+    await Item.destroy({ where: { id: itemId } });
 
-    res.json({ message });
+    res.json({ message: '상품이 삭제되었습니다.' });
   } catch (error) {
     console.error('상품을 삭제하는 도중 오류가 발생했습니다.:', error);
     res.status(500).json({ error: '서버 오류가 발생했습니다.' });
@@ -104,6 +103,7 @@ router.post('/:id/delete', async (req, res) => {
   }
 });
 
+// 상품 수정 API
 router.put('/:id', async (req, res) => {
   try {
     const itemId = req.params.id;
