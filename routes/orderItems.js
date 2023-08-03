@@ -21,7 +21,7 @@ router.post('/:itemId', async (req, res) => {
     const newOrderItem = await OrderItem.create({
       itemId,
       amount,
-      state: 0, // 발주의 기본 상태(default state)는 0으로 설정
+      state: 0,
     });
 
     res.status(201).json(newOrderItem);
@@ -36,11 +36,11 @@ router.put('/orderItems/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const { state } = req.body;
-    console.log('id:', id); // id 값 확인
-    console.log('state:', state); // state 값 확인
+    console.log('id:', id);
+    console.log('state:', state);
 
     const orderItem = await OrderItem.findByPk(id);
-    console.log('orderItem:', orderItem); // orderItem 값 확인
+    console.log('orderItem:', orderItem);
 
     if (!orderItem) {
       return res.status(404).json({ error: '해당 발주 내역을 찾을 수 없습니다.' });
@@ -48,7 +48,7 @@ router.put('/orderItems/:id', async (req, res) => {
 
     const { state: currentState } = orderItem;
     const item = await Item.findByPk(orderItem.itemId);
-    console.log('item:', item); // item 값 확인
+    console.log('item:', item);
 
     // 주문 상태가 이미 'completed'인 경우에 대한 처리 추가
     if (state === 1 && currentState === 1) {
