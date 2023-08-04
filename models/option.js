@@ -33,6 +33,11 @@ module.exports = (sequelize, DataTypes) => {
       hot: {
         type: DataTypes.BOOLEAN,
       },
+      shotCount: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+      },
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE,

@@ -32,7 +32,7 @@ router.post('/:itemId', async (req, res) => {
 });
 
 // 발주 상태 수정 API
-router.put('/orderItems/:id', async (req, res) => {
+router.put('/orderId/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const { state } = req.body;

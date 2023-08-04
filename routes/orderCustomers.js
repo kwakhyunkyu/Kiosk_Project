@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { OrderCustomer, ItemOrderCustomer, sequelize, Item } = require('../models');
+const { OrderCustomer, ItemOrderCustomer, sequelize, Item, Option } = require('../models');
 
-// 상품 주문 API
+// 상품 주문 생성 API
 router.post('/', async (req, res) => {
   try {
-    const { itemId, amount } = req.body;
+    const { itemId, amount, optionId } = req.body;
 
     if (!amount || amount < 1) {
       return res.status(400).json({ error: '유효한 수량을 입력해주세요.' });
@@ -15,6 +15,23 @@ router.post('/', async (req, res) => {
 
     if (!item) {
       return res.status(404).json({ error: '해당 상품을 찾을 수 없습니다.' });
+    }
+
+    const selectedOption = await Option.findByPk(optionId);
+
+    if (!selectedOption) {
+      return res.status(400).json({ error: '올바른 옵션을 선택해주세요.' });
+    }
+
+    // 옵션 추가 가격 계산
+    let optionPrice = 0;
+    if (selectedOption.extraPrice > 0) {
+      optionPrice += selectedOption.extraPrice;
+    }
+
+    // hot일 경우 옵션 추가 가격이 발생하지 않도록 처리
+    if (selectedOption.hot && item.hotPrice) {
+      optionPrice = 0;
     }
 
     // 주문 생성
@@ -27,10 +44,12 @@ router.post('/', async (req, res) => {
       orderCustomerId: newOrderCustomer.id,
       itemId,
       amount,
-      price: item.price, // 가격 정보를 저장
+      option: JSON.stringify(selectedOption), // 옵션 정보를 저장
+      price: (item.price + optionPrice) * amount, // 가격 정보를 저장
     });
 
-    res.status(201).json({ newOrderItem });
+    // 옵션 상세 정보를 응답에 포함시킴
+    res.status(201).json({ newOrderItem, option: selectedOption });
   } catch (error) {
     console.error('주문 중 오류가 발생했습니다.:', error);
     res.status(500).json({ error: '서버 오류가 발생했습니다.' });
